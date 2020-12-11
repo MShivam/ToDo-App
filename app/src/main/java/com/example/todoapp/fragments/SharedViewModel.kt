@@ -14,13 +14,15 @@ import com.example.todoapp.data.models.ToDoData
 
 class SharedViewModel(application: Application): AndroidViewModel(application) {
 
-    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
+    //--------- List Fragment ------------//
+    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun checkIfDatabaseEmpty(toDoData: List<ToDoData>) {
         emptyDatabase.value = toDoData.isEmpty()
     }
 
-    val listner: AdapterView.OnItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+    //--------- Add/Update Fragment ------------//
+    val listener: AdapterView.OnItemSelectedListener = object: AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             when(position) {
                 0 -> { (parent?.getChildAt(0) as TextView).setTextColor(ContextCompat.getColor(application, R.color.red)) }
@@ -28,10 +30,8 @@ class SharedViewModel(application: Application): AndroidViewModel(application) {
                 2 -> { (parent?.getChildAt(0) as TextView).setTextColor(ContextCompat.getColor(application, R.color.green)) }
             }
         }
-
         override fun onNothingSelected(parent: AdapterView<*>?) {
         }
-
     }
 
     fun parsePriority(priority: String): Priority {
@@ -47,13 +47,5 @@ class SharedViewModel(application: Application): AndroidViewModel(application) {
         return if (TextUtils.isEmpty(title) || TextUtils.isEmpty(description))
             false
         else !(title.isEmpty() || description.isEmpty())
-    }
-
-    fun parsePriorityToInt(priority: Priority): Int {
-        return when(priority) {
-            Priority.HIGH -> 0
-            Priority.MEDIUM -> 1
-            Priority.LOW -> 2
-        }
     }
 }

@@ -30,7 +30,7 @@ class AddFragment : Fragment() {
         //Set Menu
         setHasOptionsMenu(true)
 
-        view.spinner_priorities_add.onItemSelectedListener = mSharedViewModel.listner
+        view.spinner_priorities_add.onItemSelectedListener = mSharedViewModel.listener
 
         return view
     }

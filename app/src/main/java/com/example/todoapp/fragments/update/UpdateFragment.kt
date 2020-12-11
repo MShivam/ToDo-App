@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.todoapp.R
 import com.example.todoapp.data.ToDoViewModel
 import com.example.todoapp.data.models.ToDoData
+import com.example.todoapp.databinding.FragmentUpdateBinding
 import com.example.todoapp.fragments.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_update.*
 import kotlinx.android.synthetic.main.fragment_update.view.*
@@ -22,22 +23,25 @@ class UpdateFragment : Fragment() {
     private val mSharedViewModel: SharedViewModel by viewModels()
     private val mToDoViewModel: ToDoViewModel by viewModels()
 
+    private var _binding: FragmentUpdateBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_update, container, false)
+    ): View {
+        //Data Binding
+        _binding = FragmentUpdateBinding.inflate(inflater, container, false)
+        binding.args = args
+        binding.lifecycleOwner = this
 
         //Set menu
         setHasOptionsMenu(true)
 
-        view.editText_title_update.setText(args.updateItem.title)
-        view.editText_description_update.setText(args.updateItem.description)
-        view.spinner_priorities_update.setSelection(mSharedViewModel.parsePriorityToInt(args.updateItem.priority))
-        view.spinner_priorities_update.onItemSelectedListener = mSharedViewModel.listner
+        //Spinner Item Selected Listener
+        binding.spinnerPrioritiesUpdate.onItemSelectedListener = mSharedViewModel.listener
 
-        return view
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -68,7 +72,7 @@ class UpdateFragment : Fragment() {
             )
             mToDoViewModel.updateData(updateItem)
 
-            Toast.makeText(requireContext(), "Successfully updated!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Successfully Updated!", Toast.LENGTH_SHORT).show()
             //Navigate back to main view
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         } else {
@@ -89,5 +93,10 @@ class UpdateFragment : Fragment() {
         builder.setTitle("Delete '${args.updateItem.title}'")
         builder.setMessage("You are about to delete '${args.updateItem.title}'")
         builder.create().show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
