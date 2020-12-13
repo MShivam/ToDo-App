@@ -2,7 +2,7 @@
 modern android application to take notes
 
 - add/update a note
-- swipe left to delete and undo that delete
+- swipe left|right to delete and undo
 - transition and load animation
 
 app will be updated and refined for more features in the future :)
