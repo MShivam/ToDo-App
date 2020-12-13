@@ -2,17 +2,15 @@ package com.example.todoapp.fragments.list
 
 import android.app.AlertDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.*
-import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.todoapp.R
 import com.example.todoapp.data.ToDoViewModel
@@ -23,6 +21,7 @@ import com.example.todoapp.fragments.list.adapter.ListAdapter
 import com.example.todoapp.utils.hideKeyboard
 import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
+
 
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -35,8 +34,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private val adapter: ListAdapter by lazy { ListAdapter() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         //Data Binding
         _binding = FragmentListBinding.inflate(inflater, container, false)
@@ -47,8 +46,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         setUpRecyclerView()
 
         //Observing LiveData
-        mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
-            data ->
+        mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer { data ->
             mSharedViewModel.checkIfDatabaseEmpty(data)
             adapter.setData(data)
         })
@@ -82,7 +80,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                 mToDoViewModel.deleteItem(deletedItem)
                 adapter.notifyItemRemoved(viewHolder.adapterPosition)
                 //Restore deleted item
-                restoreDeletedData(viewHolder.itemView, deletedItem,)
+                restoreDeletedData(viewHolder.itemView, deletedItem)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallBack)
@@ -134,8 +132,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun searchThroughDatabase(query: String) {
         val searchQuery = "%$query%"
 
-        mToDoViewModel.searchDatabase(searchQuery).observe(this, Observer {
-            list -> list?.let {
+        mToDoViewModel.searchDatabase(searchQuery).observe(this, Observer { list ->
+            list?.let {
                 adapter.setData(it)
             }
         })
